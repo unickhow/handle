@@ -2,6 +2,7 @@
   "average-durations": "平均用时",
   "average-tries-count": "平均尝试次数",
   "back-today": "回到今天",
+  "cheatsheet": "速查表",
   "colorblind-mode": "色彩增强",
   "continue": "继续游戏",
   "correct-answer": "正确答案",
@@ -16,10 +17,13 @@
   "failed-1": "今天你已经用完十次的尝试机会了",
   "failed-2": "但是没关系，你还可以继续尝试",
   "failed-3": "你也可以随时放弃并查看答案",
+  "finals": "韵母",
   "games-count": "游戏次数",
+  "hanzi": "汉字",
   "happy-new-year-2022": "虎年快乐！",
   "hint": "提示",
-  "hint-note": "答案包含以下汉字",
+  "hint-note": "答案包含以下",
+  "initials": "声母",
   "input-placeholder": "输入四字词语...",
   "intro-1": "你有十次的机会猜一个",
   "intro-10": "每个格子的",
@@ -42,6 +46,7 @@
   "intro-9": "为橙色，表示其出现在答案中，但并不是第一个字。",
   "mask-off": "遮罩关闭",
   "mask-on": "遮罩开启",
+  "more-hint": "进一步提示",
   "name": "汉兜",
   "next-note": "距离下一题更新还有",
   "no-future-play": "Ops，这道题目来自未来，还不能玩哦！",
@@ -62,5 +67,6 @@
   "win-count": "获胜次数",
   "win-no-hint-count": "无提示获胜次数",
   "win-rate": "获胜几率",
-  "zhuyin": "注音"
+  "zhuyin": "注音",
+  "ziyin": "字音"
 }
