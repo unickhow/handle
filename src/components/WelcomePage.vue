@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isDark, showHelp, showVariants, useMask } from '~/state'
-import { initialized, useZhuyin } from '~/storage'
+import { initialized, inputMode } from '~/storage'
 import { t } from '~/i18n'
 
 function start() {
@@ -12,6 +12,8 @@ function start() {
 function variantButton() {
   showVariants.value = true
 }
+
+const final = computed(() => ({ py: 'uo', zy: 'ㄨㄛ', sp: 'o' }[inputMode.value]))
 </script>
 
 <template>
@@ -25,9 +27,7 @@ function variantButton() {
       </button>
     </div>
 
-    <div text-3xl font-serif tracking-widest>
-      {{ t('name') }}
-    </div>
+    <AppName h="2.5rem" />
     <div mt--1 op50 text-sm>
       {{ t('description') }}
     </div>
@@ -45,14 +45,14 @@ function variantButton() {
     <WordBlocks my2 :word="t('example-1')" :revealed="true" answer=" 门  " />
     <p>{{ t('intro-4') }} <b text-ok>{{ t('intro-5') }}</b> {{ t('intro-6') }}</p>
 
-    <WordBlocks my2 :word="t('example-2')" :revealed="true" answer="   仓" />
+    <WordBlocks my2 :word="t('example-2')" :revealed="true" answer="一一一水" />
     <p>{{ t('intro-7') }} <b text-mis>{{ t('intro-8') }}</b> {{ t('intro-9') }}</p>
 
     <WordBlocks my2 :word="t('example-3')" :revealed="true" answer="桥它拖 " />
     <p max-w-130>
       {{ t('intro-10') }} <b>{{ t('intro-11') }}</b> {{ t('intro-12') }}
       {{ t('intro-13') }} <b op50>{{ t('intro-14') }}</b> {{ t('intro-15') }} <b op50>{{ t('intro-14') }}</b> {{ t('intro-16') }}
-      {{ t('intro-17') }} <b text-mis>{{ useZhuyin ? 'ㄨㄛ' : 'uo' }}</b> {{ t('intro-19') }}
+      {{ t('intro-17') }} <b text-mis>{{ final }}</b> {{ t('intro-19') }}
     </p>
 
     <WordBlocks my2 :word="t('example-4')" :revealed="true" answer="武运昌隆" />
@@ -60,22 +60,23 @@ function variantButton() {
 
     <div h-1px w-10 border="b base" m4 />
 
-    <button btn tracking-widest p="x4 y2" @click="start()">
-      {{ t('start') }}
+    <button btn p="x4 y2" @click="start()">
+      <span tracking-1 pl1>{{ t('start') }}</span>
     </button>
     <div op50>
       {{ t('update-tip') }}
     </div>
 
-    <Settings />
+    <div h-1px w-10 border="b base" m4 />
+
+    <Settings :lite="true" />
 
     <div h-1px w-10 border="b base" m4 />
 
+    <div h-1px w-10 border="b base" m4 />
     <button text-primary op80 hover:op100 @click="variantButton()">
       {{ t('other-variants') }}
     </button>
-
-    <div h-1px w-10 border="b base" m4 />
     <div>
       <span op40>inspired by </span><a href="https://www.powerlanguage.co.uk/wordle/" target="_blank" op50 hover:op80>Wordle</a>
       <span op40>, made by </span>

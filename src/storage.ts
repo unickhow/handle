@@ -1,14 +1,21 @@
-import { preferZhuyin } from './i18n'
+import type { SpMode } from '@hankit/tools'
+import { preferZhuyin, t } from './i18n'
 import { dayNo } from './state'
-import type { TriesMeta } from './logic'
+import type { InputMode, TriesMeta } from './logic'
 
 export const legacyTries = useStorage<Record<number, string[]>>('handle-tries', {})
 
-export const initialized = useStorage('handle-initialized', false)
 export const history = useStorage<Record<number, TriesMeta>>('handle-tries-meta', {})
-export const useZhuyin = useStorage('handle-zhuyin', preferZhuyin)
-export const useNumberTone = useStorage('handle-number-tone', false)
+export const initialized = useStorage('handle-initialized', false)
+
+export const inputMode = useStorage<InputMode>('handle-mode', preferZhuyin ? 'zy' : 'py')
+export const spMode = useStorage<SpMode>('handle-sp-mode', 'sougou')
 export const colorblind = useStorage('handle-colorblind', false)
+export const useNoHint = useStorage('handle-hard-mode', false)
+export const useNumberTone = useStorage('handle-number-tone', false)
+export const useCheckAssist = useStorage('handle-check-assist', false)
+export const useStrictMode = useStorage('handle-strict', false)
+export const acceptCollecting = useStorage('handle-accept-collecting', true)
 
 export const meta = computed<TriesMeta>({
   get() {
@@ -51,7 +58,7 @@ export function markEnd() {
     meta.value.duration += meta.value.end - meta.value.start
 }
 
-export function onPause() {
+export function pauseTimer() {
   if (meta.value.end)
     return
 
@@ -65,7 +72,8 @@ export function onPause() {
 }
 
 export const gamesCount = computed(() => Object.values(history.value).filter(m => m.passed || m.answer || m.failed).length)
-export const passedCount = computed(() => Object.values(history.value).filter(m => m.passed).length)
+export const passedTries = computed(() => Object.values(history.value).filter(m => m.passed))
+export const passedCount = computed(() => passedTries.value.length)
 export const noHintPassedCount = computed(() => Object.values(history.value).filter(m => m.passed && !m.hint).length)
 export const historyTriesCount = computed(() => Object.values(history.value).filter(m => m.passed || m.answer || m.failed).map(m => m.tries?.length || 0).reduce((a, b) => a + b, 0))
 
@@ -75,10 +83,14 @@ export const averageDurations = computed(() => {
   if (!items.length)
     return 0
   const durations = items.map(m => m.duration!).reduce((a, b) => a + b, 0)
-  const ts = durations / items.length / 1000
-  const m = Math.floor(ts / 60)
-  const s = Math.round(ts % 60)
-  if (m)
-    return `${m}m${s}s`
-  return `${s}s`
+  return formatDuration(durations / items.length)
 })
+
+export function formatDuration(duration: number) {
+  const ts = duration / 1000
+  const m = Math.floor(ts / 60)
+  const s = Math.floor(ts % 60)
+  if (m)
+    return m + t('minutes') + s + t('seconds')
+  return s + t('seconds')
+}

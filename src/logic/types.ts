@@ -1,4 +1,6 @@
-export type MatchType = 'exact' | 'misplaced' | 'none'
+export type MatchType = 'exact' | 'misplaced' | 'none' | 'deleted'
+
+export type InputMode = 'py' | 'zy' | 'sp'
 
 export interface ParsedChar {
   char: string
@@ -28,4 +30,6 @@ export interface TriesMeta {
   tries?: string[]
   hint?: boolean
   hintLevel?: number
+  strict?: boolean
+  sent?: boolean
 }

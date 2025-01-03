@@ -8,6 +8,7 @@ const props = withDefaults(
     revealed?: boolean
     answer?: string
     animate?: boolean
+    active?: boolean
   }>(), {
     animate: true,
   },
@@ -35,17 +36,17 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div flex gap-2>
+  <div flex>
     <div
-      v-for="c,i in parseWord(word.padEnd(WORD_LENGTH, ' '), answer || todayAnswer.word)" :key="i"
-      w-20
-      h-20
-      :class="['tile', flip ? 'revealed': '']"
+      v-for="c, i in parseWord(word.padEnd(WORD_LENGTH, ' '), answer || todayAnswer.word)" :key="i"
+      w-20 h-20 m1
+      class="tile" :class="[flip ? 'revealed' : '']"
     >
       <template v-if="animate">
         <CharBlock
           class="front"
           :char="c"
+          :active="active"
           :style="{ transitionDelay: `${i * (300 + Math.random() * 50)}ms` }"
         />
         <CharBlock
@@ -54,12 +55,16 @@ watchEffect(() => {
           :answer="result[i]"
           :style="{
             transitionDelay: `${i * (300 + Math.random() * 50)}ms`,
-            animationDelay: `${i * (100 + Math.random() * 50)}ms`
+            animationDelay: `${i * (100 + Math.random() * 50)}ms`,
           }"
         />
       </template>
       <template v-else>
-        <CharBlock :char="c" :answer="result[i]" />
+        <CharBlock
+          :char="c"
+          :answer="result[i]"
+          :active="active"
+        />
       </template>
     </div>
   </div>

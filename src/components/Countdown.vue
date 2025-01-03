@@ -1,33 +1,32 @@
 <script setup lang="ts">
 import { now } from '~/state'
 import { t } from '~/i18n'
-import { START_DATE } from '~/logic'
-
-const ms = computed(() => 86400000 - (+now.value - +START_DATE) % 86400000)
+import { START_DATE, isDstObserved } from '~/logic'
+const ms = computed(() => 86400000 - ((isDstObserved(now.value) ? +now.value + 3600000 : +now.value) - +START_DATE) % 86400000)
 const formatted = computed(() => {
   const h = Math.floor((ms.value % 86400000) / 3600000)
   const m = Math.floor((ms.value % 3600000) / 60000)
   const s = Math.floor((ms.value % 60000) / 1000)
-  return t('time-format', h, m, s)
+  return t('time-format', h, m.toString().padStart(2, '0'), s.toString().padStart(2, '0'))
 })
 </script>
 
 <template>
-  <div flex gap-5 py-5>
-    <div flex="~ col center" relative>
-      <div op80>
-        {{ t('next-note') }}
-      </div>
-      <div text-2xl font-serif w-45>
-        {{ formatted }}
-      </div>
+  <div pt12 pb16>
+    <div flex="~ col" items-center>
+      <ShareButton m4 />
+      <ToggleMask :hint="true" />
     </div>
 
-    <div w-1px border="l base" />
+    <div h-1px w-10 border="t base" mt4 mb6 mxa />
 
-    <div flex="~ col gap-2" items-center>
-      <ShareButton />
-      <ExportImage />
+    <div flex="~ col center" relative>
+      <div op50 ws-nowrap>
+        {{ t('next-note') }}
+      </div>
+      <div text-lg ws-nowrap style="font-variant-numeric: tabular-nums;">
+        {{ formatted }}
+      </div>
     </div>
   </div>
 </template>
